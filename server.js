@@ -1,20 +1,21 @@
 const express = require('express')
 const cookieParser = require('cookie-parser');
 const app = express();
+const cors = require('cors');
 const PORT = process.env.PORT || 8835;
 const database = require("./app/config/database");
 const apiRoutesV1 = require("./app/v1/api/api");
 require('dotenv').config();
 
+//database.createMongoose();
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
 
 app.get('/ping', (req, res) => {
     res.send("pong")
 })
-
-//database.createMongoose();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cookieParser());
 
 app.use("/api/v1", apiRoutesV1);
 app.get("/*", async (req, res) => {
