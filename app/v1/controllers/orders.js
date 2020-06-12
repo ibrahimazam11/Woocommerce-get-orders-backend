@@ -2,6 +2,21 @@ const QueryString = require('querystring');
 const async = require('async');
 const { wcReturn } = require('../../lib/helpers')
 const constants = require('../../lib/constants');
+require('dotenv').config();
+
+exports.login = async (req, res) => {
+    try {
+        let { email, password } = req.body;
+        if(email == process.env.email && password == process.env.password) {
+            return res.json({ success: true, data: 'Log in successful'})
+        }
+        else {
+            return res.status(401).json({ success: false, data: 'Invalid credentials'})
+        }
+    } catch (error) {
+        res.status(400).json(error.response ? error.response.data : error.message)
+    }
+}
 
 exports.getAll = async (req, res) => {
     try {
