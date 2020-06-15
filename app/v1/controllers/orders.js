@@ -7,11 +7,11 @@ require('dotenv').config();
 exports.login = async (req, res) => {
     try {
         let { email, password } = req.body;
-        if(email == process.env.email && password == process.env.password) {
-            return res.json({ success: true, data: 'Log in successful'})
+        if (email == process.env.email && password == process.env.password) {
+            return res.json({ success: true, data: 'Log in successful' })
         }
         else {
-            return res.status(401).json({ success: false, data: 'Invalid credentials'})
+            return res.status(401).json({ success: false, data: 'Invalid credentials' })
         }
     } catch (error) {
         res.status(400).json(error.response ? error.response.data : error.message)
@@ -20,6 +20,7 @@ exports.login = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
+        req.query.per_page = 100;
         const query = QueryString.stringify(req.query).replace(/%20/g, '+');
         let response = await req.WooCommerce.get(`orders?${query}`)
         return res.json(wcReturn(response))
