@@ -1,4 +1,4 @@
-exports.wcReturn = (response) => {
+exports.wcReturn = (response, deliverySort) => {
 
     let data = response.data, dataArr = [];
     data.map((fieldsObj) => {
@@ -20,10 +20,17 @@ exports.wcReturn = (response) => {
             orderedProducts: fieldsObj.line_items,
             quantity: fieldsObj.line_items.length,
             totalOrderPrice: fieldsObj.total,
-            deliveryDetails: fieldsObj.iconic_delivery_meta,
+            deliveryDetails: fieldsObj.iconic_delivery_meta ? fieldsObj.iconic_delivery_meta.timestamp ? fieldsObj.iconic_delivery_meta : { timestamp: "0" } : { timestamp: "0" },
             customerNote: fieldsObj.customer_note
         })
     })
+
+    deliverySort ? dataArr.sort((a, b) => {
+        if (a.deliveryDetails.timestamp == 0) return 1
+        if (b.deliveryDetails.timestamp == 0) return -1
+        let result = parseInt(a.deliveryDetails.timestamp) - parseInt(b.deliveryDetails.timestamp)
+        return deliverySort == 1 ? result : -result
+    }) : null
 
     let obj = {
         data: dataArr
