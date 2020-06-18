@@ -9,7 +9,7 @@ exports.login = async (req, res) => {
         let { email, password } = req.body;
         if (email == process.env.email && password == process.env.password) {
             let token = process.env.auth
-            return res.cookie('w_auth', token).json({ success: true, data: 'Log in successful' })
+            return res.cookie('w_auth', token).json({ success: true, data: 'Log in successful', w_auth: token })
         }
         else {
             return res.status(401).json({ success: false, data: 'Invalid credentials' })
